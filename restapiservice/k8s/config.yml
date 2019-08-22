@@ -1,0 +1,12 @@
+server:
+    idletimeout: 4s
+    readtimeout: 4s
+    writetimeout: 4s
+    port: "9810"
+
+database:
+    dsn: "root:pwd@(localhost:3306)/localdb"
+    dialect: "mysql"
+    connectUri: "tcp(dbservice:3306)/localdb?charset=utf8&parseTime=True"
+    username: "root"
+    password: "pwd"

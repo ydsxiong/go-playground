@@ -1,0 +1,40 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: gorestapiclientdeployment
+  labels: {app: gorestapiclient}
+spec:
+  replicas: 2
+  template:
+    metadata: {labels: {app: gorestapiclient}}
+    spec:
+      containers:
+        - name: gorestapiclient
+          image: xman2019/gorestapiclient-service:${TAG}
+          command:
+          ports:
+            - containerPort: 8081
+          volumeMounts:
+            - name: gorestapiclient-config
+              mountPath: /etc/gorestapiclient/
+              readOnly: true
+      volumes:
+        - name: gorestapiclient-config
+          configMap: { name: gorestapiclient-config }
+
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: gorestapiclient
+spec:
+  type: LoadBalancer
+  selector:
+    app: gorestapiclient
+  ports:
+    - protocol: TCP
+      port: 9804
+      targetPort: 8081
+
+

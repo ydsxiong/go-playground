@@ -1,0 +1,10 @@
+{{ define "Show" }}
+  {{ template "Header" }}
+    {{ template "Menu"  }}
+    <h2> Registeration: {{ .Uid }} </h2>
+      <p>Name: {{ .Username }}</p>
+      <p>Department:  {{ .Department }}</p></p>
+      <p>Joined in: {{ .Created }}</p>
+      <br /> <a href="/edit?id={{ .Uid }}">Edit</a>
+  {{ template "Footer" }}
+{{ end }}

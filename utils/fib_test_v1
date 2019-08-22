@@ -1,0 +1,63 @@
+package utils
+
+import (
+	"fmt"
+	"testing"
+)
+
+func TestFib(t *testing.T) {
+
+	type checkResult func(uint64) error
+
+	isOne := func(have uint64) error {
+		if have != 1 {
+			return fmt.Errorf("Expected 1, found %v.", have)
+		}
+		return nil
+	}
+
+	isTwo := func(have uint64) error {
+		if have != 2 {
+			return fmt.Errorf("Expected 2, found %v.", have)
+		}
+		return nil
+	}
+
+	isTree := func(have uint64) error {
+		if have != 3 {
+			return fmt.Errorf("Expected 3 found %v.", have)
+		}
+		return nil
+	}
+
+	isFive := func(have uint64) error {
+		if have != 5 {
+			return fmt.Errorf("Expected 5 found %v.", have)
+		}
+		return nil
+	}
+
+	isEight := func(have uint64) error {
+		if have != 8 {
+			return fmt.Errorf("Expected 5 found %v.", have)
+		}
+		return nil
+	}
+
+	tests := [...]struct {
+		input int
+		check checkResult
+	}{
+		// the first test: fib of 1
+		{1, isOne}, {2, isOne}, {3, isTwo}, {4, isTree}, {5, isFive}, {6, isEight},
+	}
+
+	for _, tc := range tests {
+		t.Run(fmt.Sprintf("Fib of %d", tc.input), func(t *testing.T) {
+			result := fib(tc.input)
+			if err := tc.check(result); err != nil {
+				t.Error(err)
+			}
+		})
+	}
+}

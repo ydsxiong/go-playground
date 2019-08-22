@@ -1,0 +1,27 @@
+package utils
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestFib(t *testing.T) {
+	tests := []uint64{1, 1, 2, 3, 5, 8, 13, 21, 34, 55}
+	funcToCheck := fib
+	for index, expected := range tests {
+		input := index + 1
+		assert.Equal(t, expected, funcToCheck(input))
+	}
+
+}
+
+func TestFibV2(t *testing.T) {
+	tests := []uint64{1, 1, 2, 3, 5, 8, 13, 21, 34, 55}
+	funcToCheck := fib_v2()
+	for _, expected := range tests {
+		assert.Equal(t, expected, funcToCheck())
+	}
+
+}
+

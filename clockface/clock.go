@@ -96,8 +96,7 @@ func TransformHand(hand ClockHandDef) Point {
 
 func TimeInRadians(timeInUnit float64, halfClockTime float64) float64 {
 	//return (math.Pi / 30) * float64(tm.Second())
-	// a simple way to get the accuracy back could be rearranging the equation
-	// so that there's no dividing down and then multiplying up, it'd be just dividing all the way down.
+	// avoid dividing down and then multiplying up, in order to avoid some unnecessary PI precision loss here
 	return math.Pi / (halfClockTime / float64(timeInUnit))
 }
 
@@ -109,27 +108,17 @@ func ClockHandPoint(timeInUnit float64, timeInHalfClock float64) Point {
 }
 
 func WriteSVG(writer io.Writer, hands ...ClockHandDef) {
-	//lines := []string{svgStart, bezel}
 	clockSVG := svgStart
 	clockSVG += fmt.Sprintf(bezel, clockCentreX, clockCentreY, clockR)
 	for _, hand := range hands {
 		shp := TransformHand(hand)
 		line := fmt.Sprintf(handLineTemplate, clockCentreX, clockCentreY, shp.X, shp.Y, hand.Color)
-		//lines = append(lines, line)
 		clockSVG += line
 	}
 
-	//lines = append(lines, svgEnd)
 	clockSVG += svgEnd
 	io.WriteString(writer, clockSVG)
-	//writeClockDefinition(writer, lines)
 }
-
-// func writeClockDefinition(writer io.Writer, contents []string) {
-// 	for _, content := range contents {
-// 		io.WriteString(writer, content)
-// 	}
-// }
 
 func GetSecondHandDef(timeInUnit float64) ClockHandDef {
 	return ClockHandDef{timeInUnit, SecondHandLength, SecondHandColor, TimeInHalfClock}

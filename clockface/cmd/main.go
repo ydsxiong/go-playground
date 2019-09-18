@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 	"text/template"
 	"time"
 
@@ -34,11 +33,9 @@ A thing to note about SVGs: the origin - point (0,0) - is at the top left hand c
 
 */
 
-var clockFilePath = "./clock.svg"
+//var clockFilePath = "./clock.svg"
 
 func main() {
-	sendClockToFile()
-
 	var clockfaceTemplate, err = template.ParseFiles("clockface.html")
 	if err != nil {
 		log.Printf("problem upgrading connection to WebSockets %v\n", err)
@@ -49,19 +46,6 @@ func main() {
 		http.HandleFunc("/ws", sendClockToBrowser)
 	}
 	http.ListenAndServe(":9080", nil)
-}
-
-func sendClockToFile() {
-	clockfile, err := os.Create(clockFilePath)
-	if err != nil {
-		panic(err)
-	}
-	defer clockfile.Close()
-	now := time.Now()
-	clockface.WriteSVG(clockfile,
-		clockface.GetSecondHandDef(float64(now.Second())),
-		clockface.GetMinuteHandDef(float64(now.Minute())),
-		clockface.GetHourHandDef(float64(now.Hour()+now.Minute()/60)))
 }
 
 func sendClockToBrowser(w http.ResponseWriter, req *http.Request) {
@@ -75,3 +59,16 @@ func sendClockToBrowser(w http.ResponseWriter, req *http.Request) {
 			clockface.GetHourHandDef((float64(currTime.Hour() + currTime.Minute()/60))))
 	}
 }
+
+// func sendClockToFile() {
+// 	clockfile, err := os.Create(clockFilePath)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	defer clockfile.Close()
+// 	now := time.Now()
+// 	clockface.WriteSVG(clockfile,
+// 		clockface.GetSecondHandDef(float64(now.Second())),
+// 		clockface.GetMinuteHandDef(float64(now.Minute())),
+// 		clockface.GetHourHandDef(float64(now.Hour()+now.Minute()/60)))
+// }

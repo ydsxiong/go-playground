@@ -26,7 +26,7 @@ func NewWwebSocket(w http.ResponseWriter, r *http.Request) *ClockFaceWS {
 }
 
 /**
-Enable it to be able to used for writing/sending msg down to the client's browser
+Enable it to be used as a response writer in the context of http req/res handling
 */
 func (ws *ClockFaceWS) Write(p []byte) (n int, err error) {
 	err = ws.WriteMessage(1, p)

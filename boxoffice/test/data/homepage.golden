@@ -1,0 +1,26 @@
+
+  
+<!DOCTYPE html>
+<html lang="en-UK">
+    <head>
+        <title>The Box Office</title>
+        <meta charset="UTF-8" />
+    </head>
+    <body>  
+
+     
+     
+    <h2> Registered Guest</h2>
+    <ui>
+    
+    </ui>
+
+    <br /><br />
+    
+      <a href="/reservation">Reserve a ticket</a>
+    
+    
+  
+    </body>
+</html>
+

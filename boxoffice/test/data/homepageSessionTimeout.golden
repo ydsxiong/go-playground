@@ -1,0 +1,28 @@
+
+  
+<!DOCTYPE html>
+<html lang="en-UK">
+    <head>
+        <title>The Box Office</title>
+        <meta charset="UTF-8" />
+    </head>
+    <body>  
+
+     
+        <br/><font  color="red">You session was timed out, please start over and try again!</font><br/> <br/>
+      
+     
+    <h2> Registered Guest</h2>
+    <ui>
+    
+    </ui>
+
+    <br /><br />
+    
+      <a href="/reservation">Reserve a ticket</a>
+    
+    
+  
+    </body>
+</html>
+

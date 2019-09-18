@@ -1,0 +1,20 @@
+{{ define "New" }}
+  {{ template "Header" }}
+   <h2>Don't miss your ticket for the best ever show</h2>
+    {{if (gt .remaining 0)}}
+      <font  size="1">only {{ .remaining }} ticket(s) left</font>
+    {{else if (gt .reserved 0)}}
+      <font  size="1">0 left, {{ .reserved }} ticket(s) reserved</font>
+    {{end}}
+   
+   {{if .msg }}
+   <br/><font  color="red">{{ .msg }}</font>
+   {{ end }}
+   <br/><br/>  
+    <form method="POST" action="reserve">
+      <label> Your name </label><br/><br/>
+      <input type="text" name="guestname" /><br/><br/>
+      <input type="submit" value="Reserve ticket for 5 minutes" />
+    </form>
+  {{ template "Footer" }}
+{{ end }}

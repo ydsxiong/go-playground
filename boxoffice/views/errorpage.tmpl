@@ -1,0 +1,11 @@
+{{ define "ErrorPage" }}
+  {{ template "Header" }}
+     {{if .error }}
+      <p>Error occurred: {{ .error }}!</p>
+    {{else}}
+      <p>
+        <p>Something unexpected occuured, please go back to try again!</p>
+      </p>
+    {{end}}
+  {{ template "Footer" }}
+{{ end }}

@@ -1,0 +1,40 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: boxofficedeployment
+  labels: {app: boxoffice}
+spec:
+  replicas: 1
+  template:
+    metadata: {labels: {app: boxoffice}}
+    spec:
+      containers:
+        - name: boxoffice
+          image: xman2019/boxoffice-service:${TAG}
+          command:
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: boxoffice-config
+              mountPath: /etc/boxoffice/
+              readOnly: true
+      volumes:
+        - name: boxoffice-config
+          configMap: { name: boxoffice-config }
+
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: boxoffice
+spec:
+  type: LoadBalancer
+  selector:
+    app: boxoffice
+  ports:
+    - protocol: TCP
+      port: 8090
+      targetPort: 8080
+
+

@@ -1,0 +1,26 @@
+{{ define "Guests" }}
+  {{ template "Header" }}
+     {{if .message }}
+        <br/><font  color="red">{{ .message }}</font><br/> <br/>
+      {{ end }}
+     
+    <h2> Registered Guest</h2>
+    <ui>
+    {{ range .guests }}
+        <li> {{ .Name }} </li>
+    {{ end }}
+    </ui>
+
+    <br /><br />
+    {{if (gt .remaining 0)}}
+      <a href="/reservation">Reserve a ticket</a>
+    {{else if (gt .inreservation 0)}}
+      <a href="/reservation">Go to Reservation</a>
+    {{else}}
+      <p>
+        Sold out, no more ticket available!
+      </p>
+    {{end}}
+    
+  {{ template "Footer" }}
+{{ end }}

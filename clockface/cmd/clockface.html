@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>A Simple Analog Clock Face</title>
+</head>
+<body/>
+<script type="application/javascript">
+
+    const analogclockfaceContainer = document.getElementsByTagName('body')[0]
+
+    if (window['WebSocket']) {
+            const conn = new WebSocket('ws://' + document.location.host + '/ws')
+            conn.onmessage = evt => {
+                analogclockfaceContainer.innerHTML = evt.data
+            }
+        }
+</script>
+</html>

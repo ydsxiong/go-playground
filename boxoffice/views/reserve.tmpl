@@ -1,0 +1,27 @@
+{{ define "Reservation" }}
+  {{ template "Header" }}
+      {{if .greetings }}
+        <p>{{ .greetings }}</p> <br />
+      {{ end }}
+
+      {{if .warning }}
+        <br/><font  color="red">{{ .warning }}</font><br/> <br/>
+      {{ end }}
+
+      <p>{{ .remaining }}. Please complete the purchase using your credit card.</p>
+      
+      <form action="charge" method="POST">
+        <script
+          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="pk_test_01s2qsQyvj837QqE9fFJHLr200NyXZhFzh"
+          data-amount="999"
+          data-name="Stripe.com"
+          data-description="Widget"
+          data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+          data-locale="auto"
+          data-zip-code="true">
+        </script>
+      </form>
+
+  {{ template "Footer" }}
+{{ end }}

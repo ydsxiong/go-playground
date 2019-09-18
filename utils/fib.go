@@ -21,6 +21,14 @@ func fib_v2() func() uint64 {
 	}
 }
 
+func fibonacci(n int) int {
+	current, prev := 0, 1
+	for i := 0; i < n; i++ {
+		current, prev = current+prev, current
+	}
+	return current
+}
+
 type T struct {
 	A int
 	B string
@@ -32,7 +40,6 @@ type Fooer interface {
 	Foo3()
 }
 
-
 type SuperFooer struct {
 	Fooer
 	string
@@ -42,7 +49,6 @@ func sumOf10naturalnumbersbyimperativeapproach() int {
 
 	sf := SuperFooer{}
 	sf.Foo1() // obtained through embedding/composition, but not actually implmenting any of its methods, so it would panic here at runtime.
-
 
 	var x float64 = 3.4
 	fmt.Println("value:", reflect.ValueOf(x).String())
@@ -125,5 +131,3 @@ func sumOf10naturalnumbersbyfunctionalapproach() int {
 	// Reduce(Filter(pred, createValues), sum, uint64).(uint64)
 	return 0
 }
-
-

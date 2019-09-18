@@ -1,0 +1,81 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func check(u string, reply chan bool) {
+	time.Sleep(4 * time.Second)
+	reply <- true
+}
+
+func IsReachable(urls []string) bool {
+
+	ch := make(chan bool, 1)
+	for _, url := range urls {
+		go func(u string) {
+			check(u, ch)
+		}(url)
+	}
+	select {
+	case result := <-ch:
+		return result
+	case <-time.After(1 * time.Second):
+		return false
+	}
+}
+
+type FromNow struct {
+	offset   int
+	timeunit time.Duration
+}
+
+var timeLaylout = "2006-01-02 15:04:05"
+
+func (ts *FromNow) String() string {
+	t := time.Now().Add(time.Duration(ts.offset) * ts.timeunit)
+	timeStamp := t.Format(timeLaylout)
+
+	return fmt.Sprintf("%v", timeStamp)
+}
+
+func main() {
+	fmt.Println(IsReachable([]string{"url1"}))
+
+	t := time.Now()
+	fmt.Println(t.Format(timeLaylout))
+	old, _ := time.Parse(timeLaylout, t.Format(timeLaylout))
+
+	fromNow := FromNow{5, time.Minute}
+	tstr := fromNow.String()
+	fmt.Println(tstr)
+
+	newTime, _ := time.Parse(timeLaylout, tstr)
+
+	diff := int(newTime.Sub(old).Seconds())
+	min1, sec1 := diff/60, diff%60
+	fmt.Printf("%v - %v: time diff is %d;  %d minutes %d seconds", newTime, old, diff, min1, sec1)
+	fmt.Println("\n")
+	channel1 := make(chan string)
+	channel2 := make(chan string)
+	go func1(channel1)
+	go func1(channel2)
+	count := 0
+	for count < 3 {
+		select {
+		case v := <-channel1:
+			fmt.Println("channel 1 sends", v)
+		case v := <-channel2:
+			fmt.Println("channel 2 sends", v)
+		default: // optional
+			fmt.Println("neither channel was ready")
+		}
+		time.Sleep(time.Millisecond)
+		count++
+	}
+}
+
+func func1(channel chan string) {
+	channel <- "boom"
+}

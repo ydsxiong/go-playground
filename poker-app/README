@@ -1,0 +1,4 @@
+Run all test from poker-app dir:
+
+go test ./...
+

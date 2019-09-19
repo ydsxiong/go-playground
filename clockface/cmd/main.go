@@ -43,7 +43,7 @@ func main() {
 		http.HandleFunc("/clock", func(w http.ResponseWriter, req *http.Request) {
 			clockfaceTemplate.Execute(w, nil)
 		})
-		http.HandleFunc("/ws", sendClockToBrowser)
+		http.HandleFunc("/clockupdate", sendClockToBrowser)
 	}
 	http.ListenAndServe(":9080", nil)
 }
@@ -56,7 +56,7 @@ func sendClockToBrowser(w http.ResponseWriter, req *http.Request) {
 		clockface.WriteSVG(clockfaceWS,
 			clockface.GetSecondHandDef(float64(currTime.Second())),
 			clockface.GetMinuteHandDef(float64(currTime.Minute())),
-			clockface.GetHourHandDef((float64(currTime.Hour() + currTime.Minute()/60))))
+			clockface.GetHourHandDef((float64(currTime.Hour()) + float64(currTime.Minute())/60.0)))
 	}
 }
 

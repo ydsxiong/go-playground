@@ -10,7 +10,7 @@
     const analogclockfaceContainer = document.getElementsByTagName('body')[0]
 
     if (window['WebSocket']) {
-            const conn = new WebSocket('ws://' + document.location.host + '/ws')
+            const conn = new WebSocket('ws://' + document.location.host + '/clockupdate')
             conn.onmessage = evt => {
                 analogclockfaceContainer.innerHTML = evt.data
             }

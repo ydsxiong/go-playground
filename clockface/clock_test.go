@@ -16,18 +16,18 @@ func TestClockHand(t *testing.T) {
 	}{
 		{
 			"second hand test 1",
-			GetSecondHandDef(float64(simpletime(0, 0, 30).Second())),
-			Point{150, 150 + SecondHandLength},
+			GetSecondHandDef(simpletimeInSeconds(0, 0, 30)),
+			Point{clockCentreX, clockCentreY + SecondHandLength},
 		},
 		{
 			"minute hand test 1",
-			GetMinuteHandDef(float64(simpletime(0, 30, 0).Minute())),
-			Point{150, 150 + MinuteHandLength},
+			GetMinuteHandDef(simpletimeInMinutes(0, 30, 0)),
+			Point{clockCentreX, clockCentreY + MinuteHandLength},
 		},
 		{
 			"hour hand test 1",
-			GetHourHandDef(float64(simpletime(6, 0, 0).Hour())),
-			Point{150, 150 + HourHandLength},
+			GetHourHandDef(simpletimeInHours(6, 0, 0)),
+			Point{clockCentreX, clockCentreY + HourHandLength},
 		},
 	}
 
@@ -45,34 +45,39 @@ func TestClockHand(t *testing.T) {
 func TestTimeInRadians(t *testing.T) {
 	testcases := []struct {
 		name  string
-		time  int
+		time  float64
 		cycle float64
 		angle float64
 	}{
 		{
 			"second hand angel test 1",
-			simpletime(0, 0, 0).Second(), TimeInHalfClock,
+			simpletimeInSeconds(0, 0, 0), TimeInHalfClock,
 			0,
 		},
 		{
 			"second hand angel test 2",
-			simpletime(0, 0, 30).Second(), TimeInHalfClock,
+			simpletimeInSeconds(0, 0, 30), TimeInHalfClock,
 			math.Pi,
 		},
 		{
 			"minute hand angel test 1",
-			simpletime(0, 45, 0).Minute(), TimeInHalfClock,
+			simpletimeInMinutes(0, 45, 0), TimeInHalfClock,
 			(math.Pi / 2) * 3,
 		},
 		{
 			"hour hand angel test 1",
-			simpletime(7, 0, 0).Hour(), HoursInHalfClock,
+			simpletimeInHours(7, 0, 0), HoursInHalfClock,
 			(math.Pi / HoursInHalfClock) * 7,
 		},
 		{
 			"hour hand angel test 2",
-			simpletime(11, 0, 0).Hour(), HoursInHalfClock,
+			simpletimeInHours(11, 0, 0), HoursInHalfClock,
 			(math.Pi / HoursInHalfClock) * 11,
+		},
+		{
+			"hour hand angel test 3",
+			simpletimeInHours(11, 50, 0), HoursInHalfClock,
+			(math.Pi / HoursInHalfClock) * (11.0 + 50.0/60.0),
 		},
 	}
 
@@ -90,33 +95,33 @@ func TestTimeInRadians(t *testing.T) {
 func TestClockHandPoint(t *testing.T) {
 	testcases := []struct {
 		name  string
-		time  int
+		time  float64
 		cycle float64
 		point Point
 	}{
 		{
 			"second hand point test 1",
-			simpletime(0, 0, 30).Second(), TimeInHalfClock,
+			simpletimeInSeconds(0, 0, 30), TimeInHalfClock,
 			Point{0, -1},
 		},
 		{
 			"second hand point test 2",
-			simpletime(0, 0, 45).Second(), TimeInHalfClock,
+			simpletimeInSeconds(0, 0, 45), TimeInHalfClock,
 			Point{-1, 0},
 		},
 		{
 			"minute hand point test 1",
-			simpletime(0, 30, 0).Minute(), TimeInHalfClock,
+			simpletimeInMinutes(0, 30, 0), TimeInHalfClock,
 			Point{0, -1},
 		},
 		{
 			"hour hand point test 1",
-			simpletime(9, 0, 0).Hour(), HoursInHalfClock,
+			simpletimeInHours(9, 0, 0), HoursInHalfClock,
 			Point{-1, 0},
 		},
 		{
 			"hour hand point test 2",
-			simpletime(12, 0, 0).Hour(), HoursInHalfClock,
+			simpletimeInHours(12, 0, 0), HoursInHalfClock,
 			Point{0, 1},
 		},
 	}
@@ -134,6 +139,21 @@ func TestClockHandPoint(t *testing.T) {
 
 func simpletime(hours, minutes, seconds int) time.Time {
 	return time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
+}
+
+func simpletimeInSeconds(hours, minutes, seconds int) float64 {
+	time := time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
+	return float64(time.Second())
+}
+
+func simpletimeInMinutes(hours, minutes, seconds int) float64 {
+	time := time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
+	return float64(time.Minute())
+}
+
+func simpletimeInHours(hours, minutes, seconds int) float64 {
+	time := time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
+	return float64(time.Hour()) + float64(time.Minute())/60.0
 }
 
 func testName(t time.Time) string {

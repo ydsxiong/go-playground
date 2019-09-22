@@ -1,4 +1,4 @@
-package clockface
+package clockface_test
 
 import (
 	"bytes"
@@ -6,34 +6,36 @@ import (
 	"math"
 	"testing"
 	"time"
+
+	"github.com/ydsxiong/go-playground/clockface"
 )
 
 func TestClockHand(t *testing.T) {
 	testcases := []struct {
 		name  string
-		time  ClockHandDef
-		point Point
+		time  clockface.ClockHandDef
+		point clockface.Point
 	}{
 		{
 			"second hand test 1",
-			GetSecondHandDef(simpletimeInSeconds(0, 0, 30)),
-			Point{clockCentreX, clockCentreY + SecondHandLength},
+			clockface.GetSecondHandDef(simpletimeInSeconds(0, 0, 30)),
+			clockface.Point{clockface.ClockCentreX, clockface.ClockCentreY + clockface.SecondHandLength},
 		},
 		{
 			"minute hand test 1",
-			GetMinuteHandDef(simpletimeInMinutes(0, 30, 0)),
-			Point{clockCentreX, clockCentreY + MinuteHandLength},
+			clockface.GetMinuteHandDef(simpletimeInMinutes(0, 30, 0)),
+			clockface.Point{clockface.ClockCentreX, clockface.ClockCentreY + clockface.MinuteHandLength},
 		},
 		{
 			"hour hand test 1",
-			GetHourHandDef(simpletimeInHours(6, 0, 0)),
-			Point{clockCentreX, clockCentreY + HourHandLength},
+			clockface.GetHourHandDef(simpletimeInHours(6, 0, 0)),
+			clockface.Point{clockface.ClockCentreX, clockface.ClockCentreY + clockface.HourHandLength},
 		},
 	}
 
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
-			got := TransformHand(tc.time)
+			got := clockface.TransformHand(tc.time)
 
 			if !roughlyEqualPoint(got, tc.point) {
 				t.Errorf("Got %v, wanted %v", got, tc.point)
@@ -51,39 +53,39 @@ func TestTimeInRadians(t *testing.T) {
 	}{
 		{
 			"second hand angel test 1",
-			simpletimeInSeconds(0, 0, 0), TimeInHalfClock,
+			simpletimeInSeconds(0, 0, 0), clockface.TimeInHalfClock,
 			0,
 		},
 		{
 			"second hand angel test 2",
-			simpletimeInSeconds(0, 0, 30), TimeInHalfClock,
+			simpletimeInSeconds(0, 0, 30), clockface.TimeInHalfClock,
 			math.Pi,
 		},
 		{
 			"minute hand angel test 1",
-			simpletimeInMinutes(0, 45, 0), TimeInHalfClock,
+			simpletimeInMinutes(0, 45, 0), clockface.TimeInHalfClock,
 			(math.Pi / 2) * 3,
 		},
 		{
 			"hour hand angel test 1",
-			simpletimeInHours(7, 0, 0), HoursInHalfClock,
-			(math.Pi / HoursInHalfClock) * 7,
+			simpletimeInHours(7, 0, 0), clockface.HoursInHalfClock,
+			(math.Pi / clockface.HoursInHalfClock) * 7,
 		},
 		{
 			"hour hand angel test 2",
-			simpletimeInHours(11, 0, 0), HoursInHalfClock,
-			(math.Pi / HoursInHalfClock) * 11,
+			simpletimeInHours(11, 0, 0), clockface.HoursInHalfClock,
+			(math.Pi / clockface.HoursInHalfClock) * 11,
 		},
 		{
 			"hour hand angel test 3",
-			simpletimeInHours(11, 50, 0), HoursInHalfClock,
-			(math.Pi / HoursInHalfClock) * (11.0 + 50.0/60.0),
+			simpletimeInHours(11, 50, 0), clockface.HoursInHalfClock,
+			(math.Pi / clockface.HoursInHalfClock) * (11.0 + 50.0/60.0),
 		},
 	}
 
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
-			got := TimeInRadians(float64(tc.time), tc.cycle)
+			got := clockface.TimeInRadians(float64(tc.time), tc.cycle)
 
 			if got != tc.angle {
 				t.Errorf("Got %v, wanted %v", got, tc.angle)
@@ -97,38 +99,38 @@ func TestClockHandPoint(t *testing.T) {
 		name  string
 		time  float64
 		cycle float64
-		point Point
+		point clockface.Point
 	}{
 		{
 			"second hand point test 1",
-			simpletimeInSeconds(0, 0, 30), TimeInHalfClock,
-			Point{0, -1},
+			simpletimeInSeconds(0, 0, 30), clockface.TimeInHalfClock,
+			clockface.Point{0, -1},
 		},
 		{
 			"second hand point test 2",
-			simpletimeInSeconds(0, 0, 45), TimeInHalfClock,
-			Point{-1, 0},
+			simpletimeInSeconds(0, 0, 45), clockface.TimeInHalfClock,
+			clockface.Point{-1, 0},
 		},
 		{
 			"minute hand point test 1",
-			simpletimeInMinutes(0, 30, 0), TimeInHalfClock,
-			Point{0, -1},
+			simpletimeInMinutes(0, 30, 0), clockface.TimeInHalfClock,
+			clockface.Point{0, -1},
 		},
 		{
 			"hour hand point test 1",
-			simpletimeInHours(9, 0, 0), HoursInHalfClock,
-			Point{-1, 0},
+			simpletimeInHours(9, 0, 0), clockface.HoursInHalfClock,
+			clockface.Point{-1, 0},
 		},
 		{
 			"hour hand point test 2",
-			simpletimeInHours(12, 0, 0), HoursInHalfClock,
-			Point{0, 1},
+			simpletimeInHours(12, 0, 0), clockface.HoursInHalfClock,
+			clockface.Point{0, 1},
 		},
 	}
 
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
-			got := ClockHandPoint(float64(tc.time), tc.cycle)
+			got := clockface.ClockHandPoint(tc.time, tc.cycle)
 
 			if !roughlyEqualPoint(got, tc.point) {
 				t.Errorf("Got %v, wanted %v", got, tc.point)
@@ -142,17 +144,17 @@ func simpletime(hours, minutes, seconds int) time.Time {
 }
 
 func simpletimeInSeconds(hours, minutes, seconds int) float64 {
-	time := time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
+	time := simpletime(hours, minutes, seconds)
 	return float64(time.Second())
 }
 
 func simpletimeInMinutes(hours, minutes, seconds int) float64 {
-	time := time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
+	time := simpletime(hours, minutes, seconds)
 	return float64(time.Minute())
 }
 
 func simpletimeInHours(hours, minutes, seconds int) float64 {
-	time := time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
+	time := simpletime(hours, minutes, seconds)
 	return float64(time.Hour()) + float64(time.Minute())/60.0
 }
 
@@ -165,7 +167,7 @@ func roughlyEqualFloat64(a, b float64) bool {
 	return math.Abs(a-b) < equalityThreshold
 }
 
-func roughlyEqualPoint(a, b Point) bool {
+func roughlyEqualPoint(a, b clockface.Point) bool {
 	return roughlyEqualFloat64(a.X, b.X) &&
 		roughlyEqualFloat64(a.Y, b.Y)
 }
@@ -173,42 +175,42 @@ func roughlyEqualPoint(a, b Point) bool {
 func TestSVGWriterHand(t *testing.T) {
 	cases := []struct {
 		name string
-		time ClockHandDef
-		line Line
+		time clockface.ClockHandDef
+		line clockface.Line
 	}{
 		{
 			"second hand line test 1",
-			GetSecondHandDef(float64(simpletime(0, 0, 0).Second())),
-			Line{150, 150, 150, 150 - SecondHandLength},
+			clockface.GetSecondHandDef(simpletimeInSeconds(0, 0, 0)),
+			clockface.Line{clockface.ClockCentreX, clockface.ClockCentreY, clockface.ClockCentreX, clockface.ClockCentreY - clockface.SecondHandLength},
 		},
 		{
 			"second hand line test 2",
-			GetSecondHandDef(float64(simpletime(0, 0, 30).Second())),
-			Line{150, 150, 150, 150 + SecondHandLength},
+			clockface.GetSecondHandDef(simpletimeInSeconds(0, 0, 30)),
+			clockface.Line{clockface.ClockCentreX, clockface.ClockCentreY, clockface.ClockCentreX, clockface.ClockCentreY + clockface.SecondHandLength},
 		},
 		{
 			"minute hand line test 1",
-			GetMinuteHandDef(float64(simpletime(0, 30, 0).Minute())),
-			Line{150, 150, 150, 150 + MinuteHandLength},
+			clockface.GetMinuteHandDef(simpletimeInMinutes(0, 30, 0)),
+			clockface.Line{clockface.ClockCentreX, clockface.ClockCentreY, clockface.ClockCentreX, clockface.ClockCentreY + clockface.MinuteHandLength},
 		},
 		{
 			"hour hand line test 1",
-			GetHourHandDef(float64(simpletime(6, 0, 0).Hour())),
-			Line{150, 150, 150, 150 + HourHandLength},
+			clockface.GetHourHandDef(simpletimeInHours(6, 0, 0)),
+			clockface.Line{clockface.ClockCentreX, clockface.ClockCentreY, clockface.ClockCentreX, clockface.ClockCentreY + clockface.HourHandLength},
 		},
 		{
 			"hour hand line test 1",
-			GetHourHandDef((float64(simpletime(12, 0, 0).Hour()))),
-			Line{150, 150, 150, 150 - HourHandLength},
+			clockface.GetHourHandDef(simpletimeInHours(12, 0, 0)),
+			clockface.Line{clockface.ClockCentreX, clockface.ClockCentreY, clockface.ClockCentreX, clockface.ClockCentreY - clockface.HourHandLength},
 		},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			b := bytes.Buffer{}
-			WriteSVG(&b, tc.time)
+			clockface.WriteSVG(&b, tc.time)
 
-			svg := SVG{}
+			svg := clockface.SVG{}
 			xml.Unmarshal(b.Bytes(), &svg)
 
 			if !containsLine(tc.line, svg.Line) {
@@ -218,7 +220,7 @@ func TestSVGWriterHand(t *testing.T) {
 	}
 }
 
-func containsLine(line Line, lines []Line) bool {
+func containsLine(line clockface.Line, lines []clockface.Line) bool {
 	for _, l := range lines {
 		if line == l {
 			return true

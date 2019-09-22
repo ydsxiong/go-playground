@@ -54,10 +54,22 @@ func sendClockToBrowser(w http.ResponseWriter, req *http.Request) {
 	ticker := time.NewTicker(time.Second)
 	for currTime := range ticker.C {
 		clockface.WriteSVG(clockfaceWS,
-			clockface.GetSecondHandDef(float64(currTime.Second())),
-			clockface.GetMinuteHandDef(float64(currTime.Minute())),
-			clockface.GetHourHandDef((float64(currTime.Hour()) + float64(currTime.Minute())/60.0)))
+			clockface.GetSecondHandDef(timeInSeconds(currTime)),
+			clockface.GetMinuteHandDef(timeInMinutes(currTime)),
+			clockface.GetHourHandDef(timeInHours(currTime)))
 	}
+}
+
+func timeInSeconds(time time.Time) float64 {
+	return float64(time.Second())
+}
+
+func timeInMinutes(time time.Time) float64 {
+	return float64(time.Minute())
+}
+
+func timeInHours(time time.Time) float64 {
+	return float64(time.Hour()) + float64(time.Minute())/60.0
 }
 
 // func sendClockToFile() {
@@ -68,7 +80,7 @@ func sendClockToBrowser(w http.ResponseWriter, req *http.Request) {
 // 	defer clockfile.Close()
 // 	now := time.Now()
 // 	clockface.WriteSVG(clockfile,
-// 		clockface.GetSecondHandDef(float64(now.Second())),
-// 		clockface.GetMinuteHandDef(float64(now.Minute())),
-// 		clockface.GetHourHandDef(float64(now.Hour()+now.Minute()/60)))
+// 		clockface.GetSecondHandDef(timeInSeconds(now)),
+// 		clockface.GetMinuteHandDef(timeInMinutes(now)),
+// 		clockface.GetHourHandDef(timeInHours(now)))
 // }

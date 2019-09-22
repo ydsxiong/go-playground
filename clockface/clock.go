@@ -51,9 +51,9 @@ type Point struct {
 }
 
 const (
-	clockCentreX     = 52.0
-	clockCentreY     = 52.0
-	clockR           = 50.0
+	ClockCentreX     = 52.0
+	ClockCentreY     = 52.0
+	ClockR           = 50.0
 	SecondHandLength = 45
 	MinuteHandLength = 40
 	HourHandLength   = 30
@@ -88,8 +88,8 @@ func TransformHand(hand ClockHandDef) Point {
 	point.Y = -point.Y
 
 	// translate it from 0, 0 to SVG spec
-	point.X += clockCentreX
-	point.Y += clockCentreX
+	point.X += ClockCentreX
+	point.Y += ClockCentreX
 
 	return point
 }
@@ -109,10 +109,10 @@ func ClockHandPoint(timeInUnit float64, timeInHalfClock float64) Point {
 
 func WriteSVG(writer io.Writer, hands ...ClockHandDef) {
 	clockSVG := svgStart
-	clockSVG += fmt.Sprintf(bezel, clockCentreX, clockCentreY, clockR)
+	clockSVG += fmt.Sprintf(bezel, ClockCentreX, ClockCentreY, ClockR)
 	for _, hand := range hands {
 		shp := TransformHand(hand)
-		line := fmt.Sprintf(handLineTemplate, clockCentreX, clockCentreY, shp.X, shp.Y, hand.Color)
+		line := fmt.Sprintf(handLineTemplate, ClockCentreX, ClockCentreY, shp.X, shp.Y, hand.Color)
 		clockSVG += line
 	}
 
